@@ -1,0 +1,44 @@
+{
+  "id": "discord-voice-transcribe",
+  "name": "Discord Voice Note Transcriber",
+  "version": "0.1.0",
+  "description": "Auto-transcribe Discord .ogg voice note attachments using local ffmpeg + whisper-cli and reply with a Transcript.",
+  "channels": ["discord"],
+  "hooks": ["message_received", "before_agent_start"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": { "type": "boolean", "default": true },
+      "mode": { "type": "string", "default": "all", "enum": ["off", "all", "selected-channels"] },
+      "enabledChannelIds": {
+        "type": "array",
+        "items": { "type": "string" },
+        "default": []
+      },
+      "ffmpegBin": { "type": "string", "default": "ffmpeg" },
+      "whisperBin": { "type": "string", "default": "whisper-cli" },
+      "whisperModel": { "type": "string", "default": "" },
+      "whisperLang": { "type": "string", "default": "auto" },
+      "whisperThreads": { "type": "integer", "default": 4, "minimum": 1, "maximum": 32 },
+      "whisperTimeoutMs": { "type": "integer", "default": 180000, "minimum": 1000 },
+      "ffmpegTimeoutMs": { "type": "integer", "default": 30000, "minimum": 1000 },
+      "maxAudioBytes": { "type": "integer", "default": 8388608, "minimum": 1 },
+      "transcriptPrefix": { "type": "string", "default": "Transcript:" },
+      "maxReplyChars": { "type": "integer", "default": 1900, "minimum": 100, "maximum": 2000 },
+      "debug": { "type": "boolean", "default": false },
+      "respondWithAI": { "type": "boolean", "default": false },
+      "respondPrefix": { "type": "string", "default": "" }
+    }
+  },
+  "uiHints": {
+    "enabled": { "label": "Enabled" },
+    "mode": { "label": "Channel scope mode", "help": "Use 'off' to disable runtime behavior, 'all' for all Discord channels, or 'selected-channels' for a channel allowlist." },
+    "enabledChannelIds": { "label": "Enabled channel ids", "help": "Only used when mode is 'selected-channels'." },
+    "whisperModel": { "label": "Whisper model path", "help": "Path to whisper.cpp model (ggml-*.bin)." },
+    "whisperLang": { "label": "Language", "help": "Use 'auto' to let whisper detect language." },
+    "whisperThreads": { "label": "Threads", "advanced": true },
+    "whisperTimeoutMs": { "label": "Whisper timeout (ms)", "advanced": true },
+    "maxAudioBytes": { "label": "Max audio bytes", "advanced": true }
+  }
+}
